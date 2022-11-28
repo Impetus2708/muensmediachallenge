@@ -21,7 +21,8 @@ class CopyrightController extends Controller
 | o \\ V7 | \_/ || U || _| | \\ |\_ \| \_/ || _| | o ) || o | ( |_n|/ \ \|o\   |
 |___/ )/  |_| |_||___||___||_|\_||__/|_| |_||___||__/|_||_n_|  \__/L_n_n||_/_n_|
      //
-        ";
+        
+Still theirs, I'm just here to play.";
 
     static public function getCopyright(): string
     {
