@@ -132,8 +132,10 @@ class GameController extends Controller
             $mark === $game->getAntiDiagonal(0)->getSpace( 1 ) &&
             $mark === $game->getAntiDiagonal(0)->getSpace( 2 )
             ) return true;
-            }
+        }
         return false;
+        // if(whoHasWon($game) === null) return false;
+        return true;
     }
 
     protected function whoHasWon( GameBoard $game ): ?GamePlayer {
@@ -143,7 +145,46 @@ class GameController extends Controller
         // This function needs to return null if nobody has won yet - you can use someoneHasWon( $game ) for this.
         // If someone has won, it needs to return either GamePlayer::Human or GamePlayer::Robot.
         // =============================================================================================================
-        
+        if(!someoneHasWon($game)) return null;
+
+        $winningMark = null;
+        for($row = 0; $row <= 2; $row ++){
+            $mark = $game->getRow($row)->getSpace(0);
+            if($mark === GameMark::None){
+                continue;
+            }
+            if(
+                $mark === $game->getRow($row)->getSpace( 1 ) &&
+                $mark === $game->getRow($row)->getSpace( 2 )
+            ) $winningMark = $mark;
+        }
+
+        for($column = 0; $column <= 2; $column++){
+            $mark = $game->getColumn($column)->getSpace( 0 );
+            if($mark === GameMark::None) continue;
+            if(
+                $mark === $game->getColumn($column)->getSpace( 1 ) &&
+                $mark === $game->getColumn($column)->getSpace( 2 )
+            ) $winningMark = $mark;
+        }
+
+        $mark = $game->getMainDiagonal(0)->getSpace( 0 );
+        if ($mark !== GameMark::None ){
+            if (  
+            $mark === $game->getMainDiagonal(0)->getSpace( 1 ) &&
+            $mark === $game->getMainDiagonal(0)->getSpace( 2 )
+            ) $winningMark = $mark;
+        }
+
+        $mark = $game->getAntiDiagonal(0)->getSpace( 0 );
+        if ($mark !== GameMark::None ){
+            if(  
+            $mark === $game->getAntiDiagonal(0)->getSpace( 1 ) &&
+            $mark === $game->getAntiDiagonal(0)->getSpace( 2 )
+            ) $winningMark = $mark;
+        }
+        if($winningMark === GameMark::Circle) return GamePlayer::Human;
+        if($winningMark === GameMark::Cross) return GamePlayer::Robot;
         return null;
     }
 
