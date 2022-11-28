@@ -30,15 +30,6 @@ class GameBoard
     }
 
     /**
-     * returns board size
-     * @return int
-     */
-    public function getSize():int
-    {
-        return $this.TTT_Size;
-    }
-
-    /**
      * Checks position validity and throws an exception in case of an invalid position
      * @param int $x X position
      * @param int $y Y position

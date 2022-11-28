@@ -147,41 +147,44 @@ class GameController extends Controller
         // =============================================================================================================
 
         $winningMark = null;
-        for($row = 0; $row <= 2; $row ++){
+        for($row = 0; $row < $game::TTT_SIZE; $row ++){ //check all rows
             $mark = $game->getRow($row)->getSpace(0);
-            if($mark === GameMark::None){
-                continue;
-            }
-            if(
-                $mark === $game->getRow($row)->getSpace( 1 ) &&
-                $mark === $game->getRow($row)->getSpace( 2 )
-            ) $winningMark = $mark;
-        }
 
-        for($column = 0; $column <= 2; $column++){
-            $mark = $game->getColumn($column)->getSpace( 0 );
             if($mark === GameMark::None) continue;
-            if(
-                $mark === $game->getColumn($column)->getSpace( 1 ) &&
-                $mark === $game->getColumn($column)->getSpace( 2 )
-            ) $winningMark = $mark;
+
+            for($column = 0; $column < $game::TTT_SIZE; $column ++){
+                if($mark !== $game->getColumn($column)->getSpace($column)) break;
+                elseif ($column === $game::TTT_SIZE-1) $winningMark = $mark;
+            }
         }
 
-        $mark = $game->getMainDiagonal(0)->getSpace( 0 );
-        if ($mark !== GameMark::None ){
-            if (  
-            $mark === $game->getMainDiagonal(0)->getSpace( 1 ) &&
-            $mark === $game->getMainDiagonal(0)->getSpace( 2 )
-            ) $winningMark = $mark;
+        for($column = 0; $column < $game::TTT_SIZE; $column++){ //check all columns
+            $mark = $game->getColumn($column)->getSpace( 0 );
+
+            if($mark === GameMark::None) continue;
+
+            for($row = 0; $row < $game::TTT_SIZE; $row ++){
+                if($mark !== $game->getRow($row)->getSpace($column)) break;
+                elseif ($row === $game::TTT_SIZE-1) $winningMark = $mark;
+            }
         }
 
-        $mark = $game->getAntiDiagonal(0)->getSpace( 0 );
+        $mark = $game->getMainDiagonal(0)->getSpace( 0 ); //check main diagonal
         if ($mark !== GameMark::None ){
-            if(  
-            $mark === $game->getAntiDiagonal(0)->getSpace( 1 ) &&
-            $mark === $game->getAntiDiagonal(0)->getSpace( 2 )
-            ) $winningMark = $mark;
+            for($i = 0; $i < $game::TTT_SIZE; $i++){
+                if ($mark !== $game->getMainDiagonal(0)->getSpace($i)) break;
+                elseif ($i === $game::TTT_SIZE-1) $winningMark = $mark;
+            }    
         }
+
+        $mark = $game->getAntiDiagonal(0)->getSpace( 0 ); //check anti diagonal
+        if ($mark !== GameMark::None ){
+            for($i = 0; $i < $game::TTT_SIZE; $i++){
+                if ($mark !== $game->getAntiDiagonal(0)->getSpace($i)) break;
+                elseif ($i === $game::TTT_SIZE-1) $winningMark = $mark;
+            }    
+        }
+
         if($winningMark === GameMark::Circle) return GamePlayer::Human;
         if($winningMark === GameMark::Cross) return GamePlayer::Robot;
         return null;
