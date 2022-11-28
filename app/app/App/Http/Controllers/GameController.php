@@ -227,7 +227,7 @@ class GameController extends Controller
 
         // Check if the given position is actually valid; can't have the player draw a cross on the table next to the
         // game board ;)
-        if ($x < 0 || $x > 2 || $y < 0 || $y > 2)
+        if ($x < 0 || $x > $game::TTT_SIZE-1 || $y < 0 || $y > $game::TTT_SIZE-1)
             return response("Position outside of the game board")->setStatusCode(422)->header('Content-Type', 'text/plain');
 
         // Prevent the player from playing if the game has already ended
